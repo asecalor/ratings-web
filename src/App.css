@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  text-underline-position: auto;
+}
+
+.list-item {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+.stars {
+  color: yellow;
+}

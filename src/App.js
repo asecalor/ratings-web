@@ -1,22 +1,42 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './App.css';
 
 function App() {
+  const [ratings, setRatings] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:3000/review/ratings')
+      .then(response => {
+        setRatings(response.data);
+      })
+      .catch(error => {
+        console.error("There was an error fetching the ratings!", error);
+      });
+  }, []);
+
+  function stars(number) {
+    let stars = '';
+    for (let i = 0; i < 5; i++) {
+      stars += i < number ? '★' : '☆';
+    }
+    return stars;
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <u className='title'>
+          Client Ratings
+        </u>
+        <ul>
+          {ratings && ratings.map(rating => (
+            <li key={rating.providerId} className='list-item'>
+              Provider ID: {rating.providerId}, Rating: <span className='stars'>{stars(rating.rating)}</span> ({rating.rating})
+            </li>
+          ))}
+          {(ratings.length === 0 || !ratings )&& <li>No ratings found</li>}
+        </ul>
       </header>
     </div>
   );
