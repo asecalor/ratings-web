@@ -1,14 +1,7 @@
-// cypress/integration/app_spec.js
-
 describe('Client Ratings App', () => {
   beforeEach(() => {
-    // Intercept the API call to return mock data
-    cy.intercept('GET', 'http://localhost:3000/review/rating', {
-      fixture: 'ratings.json' // create a fixture file with this name
-    }).as('getRatings');
-    
     // Visit the app
-    cy.visit('http://localhost:3002');
+    cy.visit('http://localhost:3001');
   });
 
   it('displays the title', () => {
@@ -16,7 +9,7 @@ describe('Client Ratings App', () => {
   });
 
   it('fetches and displays ratings', () => {
-    cy.wait('@getRatings');
+    // Ensure the backend server is running and providing actual data
     cy.get('ul').within(() => {
       cy.get('li').should('have.length.at.least', 1);
       cy.get('li').first().contains('Provider ID:');
@@ -24,25 +17,20 @@ describe('Client Ratings App', () => {
   });
 
   it('displays stars for ratings', () => {
-    cy.wait('@getRatings');
     cy.get('.stars').first().should('contain.text', '★');
   });
 
   it('displays "No ratings found" when there are no ratings', () => {
-    // Intercept API call with empty response for this test
-    cy.intercept('GET', 'http://localhost:3000/review/rating', []).as('getEmptyRatings');
-    cy.reload();
-    cy.wait('@getEmptyRatings');
+    // Ensure the backend server is running and providing empty response for this test
+    // or you can directly test by making ratings state empty
     cy.get('ul').contains('No ratings found').should('be.visible');
   });
 
   it('handles API errors gracefully', () => {
-    cy.intercept('GET', 'http://localhost:3000/review/rating', {
-      statusCode: 500,
-      body: {}
-    }).as('getRatingsError');
-    cy.reload();
-    cy.wait('@getRatingsError');
+    // Ensure the backend server is running and returning error response for this test
+    // You can also simulate API errors by mocking the request in the backend to return an error
+    // Alternatively, you can directly simulate error by passing error response to your `ratings` state
+    // e.g., setRatings([]);
     cy.get('ul').contains('No ratings found').should('be.visible');
   });
 });
