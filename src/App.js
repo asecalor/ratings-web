@@ -6,7 +6,7 @@ function App() {
   const [ratings, setRatings] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/review/ratings')
+    axios.get('http://localhost:3000/review/rating')
       .then(response => {
         setRatings(response.data);
       })
